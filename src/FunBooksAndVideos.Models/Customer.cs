@@ -9,7 +9,7 @@ namespace FunBooksAndVideos.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<CustomerAddress> Addresses { get; set; }
-        public MembershipType MembershipType { get; set; }
+        public CustomerMembershipType MembershipType { get; set; }
 
         public Customer() => this.Id = Guid.NewGuid();
 

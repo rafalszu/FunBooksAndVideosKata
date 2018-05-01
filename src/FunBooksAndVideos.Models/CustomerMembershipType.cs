@@ -1,8 +1,8 @@
 namespace FunBooksAndVideos.Models
 {
-    public enum MembershipType
+    public enum CustomerMembershipType
     {
-        BookClub,
+        BookClub = 0,
         VideoClub,
         Premium
     }
