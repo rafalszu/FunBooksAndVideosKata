@@ -1,5 +1,6 @@
 using System;
 
+// applied on ORM level, db should store just the product type id
 namespace FunBooksAndVideos.Models
 {
     public abstract class ProductType
