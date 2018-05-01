@@ -12545,13 +12545,13 @@
       "projectName": "FunBooksAndVideos.WebAPI",
       "projectPath": "/Users/rafal/Projects/FunBooksAndVideos/src/FunBooksAndVideos.WebAPI/FunBooksAndVideos.WebAPI.csproj",
       "packagesPath": "/Users/rafal/.nuget/packages/",
-      "outputPath": "/Users/rafal/Projects/FunBooksAndVideos/src/FunBooksAndVideos.WebAPI/obj/",
+      "outputPath": "/Users/rafal/Projects/FunBooksAndVideos/src/FunBooksAndVideos.WebAPI/obj",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/rafal/.nuget/NuGet/NuGet.Config"
+        "/Users/rafal/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -12573,14 +12573,15 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
+          "Microsoft.NETCore.App": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "2.0",
+            "autoReferenced": true
+          },
           "Microsoft.AspNetCore.All": {
             "target": "Package",
-            "version": "[2.0.5, )"
-          },
-          "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "[2.0.0, )",
-            "autoReferenced": true
+            "version": "2.0.5"
           }
         },
         "imports": [

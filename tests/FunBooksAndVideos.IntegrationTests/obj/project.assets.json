@@ -5723,13 +5723,13 @@
       "projectName": "FunBooksAndVideos.IntegrationTests",
       "projectPath": "/Users/rafal/Projects/FunBooksAndVideos/tests/FunBooksAndVideos.IntegrationTests/FunBooksAndVideos.IntegrationTests.csproj",
       "packagesPath": "/Users/rafal/.nuget/packages/",
-      "outputPath": "/Users/rafal/Projects/FunBooksAndVideos/tests/FunBooksAndVideos.IntegrationTests/obj/",
+      "outputPath": "/Users/rafal/Projects/FunBooksAndVideos/tests/FunBooksAndVideos.IntegrationTests/obj",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/rafal/.nuget/NuGet/NuGet.Config"
+        "/Users/rafal/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -5751,23 +5751,23 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "Microsoft.NET.Test.Sdk": {
-            "target": "Package",
-            "version": "[15.5.0, )"
-          },
           "Microsoft.NETCore.App": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[2.0.0, )",
+            "version": "2.0",
             "autoReferenced": true
+          },
+          "Microsoft.NET.Test.Sdk": {
+            "target": "Package",
+            "version": "15.5.0"
           },
           "xunit": {
             "target": "Package",
-            "version": "[2.3.1, )"
+            "version": "2.3.1"
           },
           "xunit.runner.visualstudio": {
             "target": "Package",
-            "version": "[2.3.1, )"
+            "version": "2.3.1"
           }
         },
         "imports": [
