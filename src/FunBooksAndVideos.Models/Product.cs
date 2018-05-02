@@ -2,15 +2,15 @@ using System;
 
 namespace FunBooksAndVideos.Models
 {
-    public class Product
+    public class Product : ModelBase
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public ProductType Type { get; set; }
 
-        public Product() => this.Id = Guid.NewGuid();
+        public Product() : base()
+        {}
 
-        public Product(string name, ProductType productType) : this()
+        public Product(string name, ProductType productType) : base()
         {
             this.Name = name;
             this.Type = productType;
