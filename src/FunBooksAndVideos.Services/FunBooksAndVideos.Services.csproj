@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup>
+  <ItemGroup>
     <ProjectReference Include="..\FunBooksAndVideos.Models\FunBooksAndVideos.Models.csproj" />
-  </PropertyGroup>
+  </ItemGroup>
 </Project>
