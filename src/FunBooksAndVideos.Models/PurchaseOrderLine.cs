@@ -8,5 +8,13 @@ namespace FunBooksAndVideos.Models
 
         public PurchaseOrderLine() : base()
         {}
+
+        public PurchaseOrderLine(Product product) : this() 
+        {
+            if(product == null)
+                throw new ArgumentNullException(nameof(product));
+                 
+            this.Product = product;
+        }
     }
 }
