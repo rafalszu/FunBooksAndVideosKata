@@ -1,4 +1,5 @@
 using System;
+using FunBooksAndVideos.Models.Exceptions;
 
 namespace FunBooksAndVideos.Models
 {
@@ -16,6 +17,18 @@ namespace FunBooksAndVideos.Models
 
         public CustomerAddress(string friendlyName, string streetLine1, string streetLine2, string zipCode, string city, string country) : base()
         {
+            if(string.IsNullOrWhiteSpace(friendlyName))
+                throw new ArgumentNullException(nameof(friendlyName));
+            if(string.IsNullOrWhiteSpace(streetLine1) && string.IsNullOrWhiteSpace(streetLine2))
+                throw new ValidationErrorException("streetline1 or streetline2 need to have a value");
+
+            if(string.IsNullOrWhiteSpace(zipCode))
+                throw new ArgumentNullException(nameof(zipCode));
+            if(string.IsNullOrWhiteSpace(city))
+                throw new ArgumentNullException(nameof(city));
+            if(string.IsNullOrWhiteSpace(country))
+                throw new ArgumentNullException(nameof(country));
+
             this.FriendlyName = friendlyName;
             this.StreetLine1 = streetLine1;
             this.StreetLine2 = streetLine2;

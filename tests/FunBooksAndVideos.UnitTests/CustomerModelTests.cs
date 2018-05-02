@@ -23,5 +23,27 @@ namespace FunBooksAndVideos.UnitTests
             Assert.NotEqual(string.Empty, c2.FirstName);
             Assert.NotEqual(string.Empty, c2.LastName);
         }
+
+        [Fact]
+        public void ConstructorFailsIfArgumentsAreEmpty()
+        {
+            var exception1 = Record.Exception(() => {
+                Customer c = new Customer("", "");
+            });
+            Assert.NotNull(exception1);
+            Assert.IsType<ArgumentNullException>(exception1);
+
+            var exception2 = Record.Exception(() => {
+                Customer c = new Customer("first name", "");
+            });
+            Assert.NotNull(exception2);
+            Assert.IsType<ArgumentNullException>(exception2);
+
+            var exception3 = Record.Exception(() => {
+                Customer c = new Customer("", "last name");
+            });
+            Assert.NotNull(exception3);
+            Assert.IsType<ArgumentNullException>(exception3);
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using FunBooksAndVideos.Models;
+using FunBooksAndVideos.Models.Exceptions;
 using Xunit;
 
 namespace FunBooksAndVideos.UnitTests
@@ -26,6 +27,40 @@ namespace FunBooksAndVideos.UnitTests
             Assert.Equal("zipcode", address.ZipCode);
             Assert.Equal("city", address.City);
             Assert.Equal("country", address.Country);
+        }
+
+        [Fact]
+        public void ConstructorFailsIfUncompleteDataPassed()
+        {
+            var exception1 = Record.Exception(() => {
+                CustomerAddress c = new CustomerAddress("", "", "", "", "", "");
+            });
+            Assert.NotNull(exception1);
+            Assert.IsType<ArgumentNullException>(exception1);
+            
+            var exception2 = Record.Exception(() => {
+                CustomerAddress c = new CustomerAddress("name", null, null, null, null, null);
+            });
+            Assert.NotNull(exception2);
+            Assert.IsType<ValidationErrorException>(exception2);
+
+            var exception3 = Record.Exception(() => {
+                CustomerAddress c = new CustomerAddress("name", "street1", null, "", "", "");
+            });
+            Assert.NotNull(exception3);
+            Assert.IsType<ArgumentNullException>(exception3);
+
+            var exception4 = Record.Exception(() => {
+                CustomerAddress c = new CustomerAddress("name", "street1", "", "zip", "", "country");
+            });
+            Assert.NotNull(exception4);
+            Assert.IsType<ArgumentNullException>(exception4);
+
+            var exception5 = Record.Exception(() => {
+                CustomerAddress c = new CustomerAddress("name", "street1", "", "zip", "city", "");
+            });
+            Assert.NotNull(exception5);
+            Assert.IsType<ArgumentNullException>(exception5);
         }
     }
 }
