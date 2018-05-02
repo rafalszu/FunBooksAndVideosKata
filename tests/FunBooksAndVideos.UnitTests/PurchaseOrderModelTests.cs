@@ -25,9 +25,17 @@ namespace FunBooksAndVideos.UnitTests
         [Fact]
         public void ConstructorFailsIfNocustomerOrAddressGiven()
         {
-            Assert.Throws<ArgumentNullException>(() => { PurchaseOrder po = new PurchaseOrder(0, null, null); });
-            Assert.Throws<ArgumentNullException>(() => { PurchaseOrder po = new PurchaseOrder(0, new Customer(), null); });
-            Assert.Throws<ArgumentNullException>(() => { PurchaseOrder po = new PurchaseOrder(0, null, new CustomerAddress()); });
+            var exception1 = Record.Exception(() => { PurchaseOrder po = new PurchaseOrder(0, null, null); });
+            Assert.NotNull(exception1);
+            Assert.IsType<ArgumentNullException>(exception1);
+
+            var exception2 = Record.Exception(() => { PurchaseOrder po = new PurchaseOrder(0, new Customer(), null); });
+            Assert.NotNull(exception2);
+            Assert.IsType<ArgumentNullException>(exception2);
+            
+            var exception3 = Record.Exception(() => { PurchaseOrder po = new PurchaseOrder(0, null, new CustomerAddress()); });
+            Assert.NotNull(exception3);
+            Assert.IsType<ArgumentNullException>(exception3);
         }
     }
 }

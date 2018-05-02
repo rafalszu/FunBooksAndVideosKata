@@ -12,6 +12,9 @@ namespace FunBooksAndVideos.Models
 
         public Product(string name, ProductType productType) : base()
         {
+            if(productType == null)
+                throw new ArgumentNullException(nameof(productType));
+
             this.Name = name;
             this.Type = productType;
         }

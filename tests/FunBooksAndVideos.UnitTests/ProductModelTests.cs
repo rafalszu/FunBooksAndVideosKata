@@ -20,5 +20,13 @@ namespace FunBooksAndVideos.UnitTests
             Assert.Equal("something", p.Name);
             Assert.IsType<BookProductType>(p.Type);
         }
+
+        [Fact]
+        public void ConstructorFailsIfProductTypeIsNull()
+        {
+            var exception = Record.Exception(() => { Product p = new Product("somenthing", null); });
+            Assert.NotNull(exception);
+            Assert.IsType<ArgumentNullException>(exception);
+        }
     }
 }
