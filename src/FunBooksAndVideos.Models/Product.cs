@@ -7,12 +7,12 @@ namespace FunBooksAndVideos.Models
     public class Product : ModelBase, IValidation
     {
         public string Name { get; set; }
-        public ProductType Type { get; set; }
+        public IProductType Type { get; set; }
 
         public Product() : base()
         {}
 
-        public Product(string name, ProductType productType) : this()
+        public Product(string name, IProductType productType) : this()
         {
             if(productType == null)
                 throw new ArgumentNullException(nameof(productType));
