@@ -9,7 +9,7 @@ namespace FunBooksAndVideos.Models
         public decimal TotalValue { get; set; }
         public Customer Customer { get; set; }
         public CustomerAddress ShippingAddress { get; set; }
-        List<PurchaseOrderLine> OrderLines { get; set; }
+        public List<PurchaseOrderLine> OrderLines { get; set; }
 
         public PurchaseOrder() : base()
         { 
