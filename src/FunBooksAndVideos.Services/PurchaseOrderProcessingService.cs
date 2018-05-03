@@ -11,7 +11,7 @@ namespace FunBooksAndVideos.Services
     public class PurchaseOrderProcessingService : IPurchaseOrderProcessingService
     {
         private ConcurrentQueue<PurchaseOrder> _orderQueue;
-        ConcurrentQueue<PurchaseOrder> OrderQueue
+        public ConcurrentQueue<PurchaseOrder> OrderQueue
         {
             get
             {
@@ -26,6 +26,9 @@ namespace FunBooksAndVideos.Services
         {
             if(purchaseOrder == null)
                 throw new ArgumentNullException(nameof(purchaseOrder));
+
+            if(purchaseOrder.OrderLines == null)
+                throw new Exception("Can't process orders without lines");
 
             // schedule queue processing after 2 seconds
             await Task.Factory.StartNew(async () => await ProcessItemsInQueueAsync(2000));
@@ -46,10 +49,13 @@ namespace FunBooksAndVideos.Services
             }
         }
 
-        private async Task FinalizePurchaseOrderAsync(PurchaseOrder order)
+        internal async Task FinalizePurchaseOrderAsync(PurchaseOrder order)
         {
             if(order == null)
                 throw new ArgumentNullException(nameof(order));
+
+            if(order.OrderLines == null)
+                throw new Exception("Can't process orders without lines");
 
             // get all assemblies with interface IOrderProcessor
             // go line by line
