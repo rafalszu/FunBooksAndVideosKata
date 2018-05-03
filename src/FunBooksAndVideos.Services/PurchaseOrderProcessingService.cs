@@ -27,26 +27,25 @@ namespace FunBooksAndVideos.Services
         {
             if(purchaseOrder == null)
                 throw new ArgumentNullException(nameof(purchaseOrder));
-
             if(purchaseOrder.OrderLines == null)
                 throw new ValidationErrorException("Can't process orders without lines");
-
-            // schedule queue processing after 2 seconds
-            await Task.Factory.StartNew(async () => await ProcessItemsInQueueAsync(2000));
-
-            _orderQueue.Enqueue(purchaseOrder);
+            
+            OrderQueue.Enqueue(purchaseOrder);
+            // in real world scenario dequeue would be timer based, bur for the sake of the simplicity i'll just call the dequeue manually
+            await ProcessItemsInQueueAsync();
         }
 
-        private async Task ProcessItemsInQueueAsync(int delayMs)
+        private async Task ProcessItemsInQueueAsync()
         {
-            await Task.Delay(delayMs);
-            
+            System.Console.WriteLine("Queue count: {0}", OrderQueue.Count);
             // for the sake of simplicity this is just a simple loop, but should be parallelized
             while(OrderQueue.Count > 0)
             {
                 PurchaseOrder order = null;
                 if(OrderQueue.TryDequeue(out order))
+                {
                     await FinalizePurchaseOrderAsync(order);
+                }
             }
         }
 
@@ -54,9 +53,7 @@ namespace FunBooksAndVideos.Services
         {
             if(order == null)
                 throw new ArgumentNullException(nameof(order));
-
-            if(order.OrderLines == null)
-                throw new ValidationErrorException("Can't process orders without lines");
+            order.Validate();
 
             // get all assemblies with interface IOrderProcessor
             // go line by line

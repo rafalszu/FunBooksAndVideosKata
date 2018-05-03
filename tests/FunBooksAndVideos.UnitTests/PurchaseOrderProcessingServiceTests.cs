@@ -26,16 +26,16 @@ namespace FunBooksAndVideos.UnitTests
             Assert.IsType<ArgumentNullException>(exception);
         }
 
-        // [Fact]
-        // public async Task CantProcessOrderWithoutLines()
-        // {
-        //     PurchaseOrderProcessingService service = new PurchaseOrderProcessingService();
-        //     var exception = await Record.ExceptionAsync(async () => {
-        //         PurchaseOrder order = new PurchaseOrder();
-        //         await service.ProcessPurchaseOrderAsync(order);
-        //     });
-        //     Assert.NotNull(exception);
-        //     Assert.IsType<ValidationErrorException>(exception);
-        // }
+        [Fact]
+        public async Task CantProcessInvalidOrder()
+        {
+            PurchaseOrderProcessingService service = new PurchaseOrderProcessingService();
+            var ex = await Record.ExceptionAsync(async () => {
+                PurchaseOrder order = new PurchaseOrder();
+                await service.ProcessPurchaseOrderAsync(order);
+            });
+            Assert.NotNull(ex);
+            Assert.IsType<ValidationErrorException>(ex);
+        }
     }
 }
