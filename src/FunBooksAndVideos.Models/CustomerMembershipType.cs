@@ -4,6 +4,7 @@ namespace FunBooksAndVideos.Models
     {
         BookClub = 0,
         VideoClub,
-        Premium
+        Premium,
+        None
     }
 }
