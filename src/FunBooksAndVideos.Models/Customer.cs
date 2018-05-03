@@ -11,7 +11,9 @@ namespace FunBooksAndVideos.Models
         public CustomerMembershipType MembershipType { get; set; }
 
         public Customer() : base()
-        {}
+        {
+            this.MembershipType = CustomerMembershipType.None;
+        }
 
         public Customer(string firstName, string lastName) : base()
         {
