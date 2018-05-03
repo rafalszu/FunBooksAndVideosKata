@@ -62,5 +62,35 @@ namespace FunBooksAndVideos.UnitTests
             Assert.NotNull(exception5);
             Assert.IsType<ArgumentNullException>(exception5);
         }
+
+        [Fact]
+        public void CustomerAddressIsNotValidIfAnyOfRequiredFieldsIsMissing()
+        {
+            var ex1 = Record.Exception(() => {
+                CustomerAddress ca = new CustomerAddress();
+                ca.FriendlyName = "name";
+
+                ca.Validate();
+            });
+        }
+
+        [Fact]
+        public void CustomerAddressIsValidWhenAllDataIsFilledIn()
+        {
+            var ex = Record.Exception(() => {
+                CustomerAddress addr = new CustomerAddress
+                {
+                    City = "city",
+                    Country = "country",
+                    ZipCode = "zipcode",
+                    FriendlyName = "friendly name",
+                    StreetLine1 = "street 1",
+                };
+
+                addr.Validate();
+            });
+
+            Assert.Null(ex);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using FunBooksAndVideos.Models;
+using FunBooksAndVideos.Models.Exceptions;
 
 namespace FunBooksAndVideos.Services
 {
@@ -28,7 +29,7 @@ namespace FunBooksAndVideos.Services
                 throw new ArgumentNullException(nameof(purchaseOrder));
 
             if(purchaseOrder.OrderLines == null)
-                throw new Exception("Can't process orders without lines");
+                throw new ValidationErrorException("Can't process orders without lines");
 
             // schedule queue processing after 2 seconds
             await Task.Factory.StartNew(async () => await ProcessItemsInQueueAsync(2000));
@@ -55,7 +56,7 @@ namespace FunBooksAndVideos.Services
                 throw new ArgumentNullException(nameof(order));
 
             if(order.OrderLines == null)
-                throw new Exception("Can't process orders without lines");
+                throw new ValidationErrorException("Can't process orders without lines");
 
             // get all assemblies with interface IOrderProcessor
             // go line by line

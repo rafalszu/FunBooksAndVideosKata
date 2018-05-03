@@ -1,8 +1,10 @@
 using System;
+using FunBooksAndVideos.Models.Exceptions;
+using FunBooksAndVideos.Models.Interfaces;
 
 namespace FunBooksAndVideos.Models
 {
-    public class Product : ModelBase
+    public class Product : ModelBase, IValidation
     {
         public string Name { get; set; }
         public ProductType Type { get; set; }
@@ -10,13 +12,21 @@ namespace FunBooksAndVideos.Models
         public Product() : base()
         {}
 
-        public Product(string name, ProductType productType) : base()
+        public Product(string name, ProductType productType) : this()
         {
             if(productType == null)
                 throw new ArgumentNullException(nameof(productType));
 
             this.Name = name;
             this.Type = productType;
+        }
+
+        public void Validate()
+        {
+            if(string.IsNullOrWhiteSpace(Name))
+                throw new ValidationErrorException(nameof(Name));
+            if(Type == null)
+                throw new ValidationErrorException(nameof(Type));
         }
     }
 }
