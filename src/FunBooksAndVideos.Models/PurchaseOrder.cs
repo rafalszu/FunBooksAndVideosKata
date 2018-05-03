@@ -13,6 +13,7 @@ namespace FunBooksAndVideos.Models
         public Customer Customer { get; set; }
         public CustomerAddress ShippingAddress { get; set; }
         public List<PurchaseOrderLine> OrderLines { get; set; }
+        public ShippingSlip ShippingSlip { get; set; }
 
         public PurchaseOrder() : base()
         { 
