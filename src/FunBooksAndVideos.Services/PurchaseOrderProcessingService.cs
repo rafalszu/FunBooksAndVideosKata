@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FunBooksAndVideos.Models;
 using FunBooksAndVideos.Models.Exceptions;
+using FunBooksAndVideos.Services.Processors;
 
 namespace FunBooksAndVideos.Services
 {
@@ -21,6 +22,16 @@ namespace FunBooksAndVideos.Services
 
                 return _orderQueue;
             }
+        }
+
+        public PurchaseOrderProcessingService()
+        {
+            // get all assemblies with interface IOrderProcessor
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IOrderLineProcessor<>).IsAssignableFrom(p) && !p.IsInterface)
+                .ToList();
+
         }
 
         public async Task ProcessPurchaseOrderAsync(PurchaseOrder purchaseOrder)
@@ -55,10 +66,14 @@ namespace FunBooksAndVideos.Services
                 throw new ArgumentNullException(nameof(order));
             order.Validate();
 
-            // get all assemblies with interface IOrderProcessor
-            // go line by line
-            // check if any of assemblies CanProcess given productType
-            // if so, process line
+            
+            // types.ForEach(t => {
+            //     // create instance of given type
+            //     var instance = Activator.CreateInstance(t);
+                
+            //     // check canHandle
+            //     // if so, call handle
+            // });
         }
     }
 }
