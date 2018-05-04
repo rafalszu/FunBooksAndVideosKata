@@ -19,7 +19,7 @@ namespace FunBooksAndVideos.UnitTests
         public void ProcessorsListIsNotEmpty()
         {
             PurchaseOrderProcessingService service = new PurchaseOrderProcessingService();
-            Assert.NotEmpty(service.P)
+            Assert.NotEmpty(service.Processors);
         }
 
         [Fact]
