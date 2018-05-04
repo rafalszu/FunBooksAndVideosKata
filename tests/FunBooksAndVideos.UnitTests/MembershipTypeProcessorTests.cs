@@ -112,5 +112,73 @@ namespace FunBooksAndVideos.UnitTests
             Assert.NotNull(ex3);
             Assert.IsType<NotSupportedException>(ex3);
         }
+
+        [Fact]
+        public async Task MembershipChangesToBookmembershipWhenWasNoneAndBookmembershipWasOrdered()
+        {
+            CustomerAddress addr = new CustomerAddress("name", "street1", null, "zip", "city", "country");
+            Customer customer = new Customer("first", "last");
+            customer.Addresses.Add(addr);
+
+            Product bookMembership = new Product("book membership", new BookMembershipProductType());
+            PurchaseOrder validorder = new PurchaseOrder(1, customer, addr);
+            PurchaseOrderLine validLine = new PurchaseOrderLine(bookMembership);
+            validorder.OrderLines.Add(validLine);
+
+            MembershipTypeProcessor proc = new MembershipTypeProcessor();
+
+            var ex = await Record.ExceptionAsync(async () => {
+                await proc.ProcessAsync(validorder, validLine);
+            });
+
+            Assert.Null(ex);
+            Assert.Equal(CustomerMembershipType.BookClub, customer.MembershipType);
+        }
+
+        [Fact]
+        public async Task MembershipChangesToPremiumWhenWasVideomembershipAndBookmembershipWasOrdered()
+        {
+            CustomerAddress addr = new CustomerAddress("name", "street1", null, "zip", "city", "country");
+            Customer customer = new Customer("first", "last");
+            customer.Addresses.Add(addr);
+            customer.MembershipType = CustomerMembershipType.VideoClub;
+
+            Product bookMembership = new Product("book membership", new BookMembershipProductType());
+            PurchaseOrder validorder = new PurchaseOrder(1, customer, addr);
+            PurchaseOrderLine validLine = new PurchaseOrderLine(bookMembership);
+            validorder.OrderLines.Add(validLine);
+
+            MembershipTypeProcessor proc = new MembershipTypeProcessor();
+
+            var ex = await Record.ExceptionAsync(async () => {
+                await proc.ProcessAsync(validorder, validLine);
+            });
+
+            Assert.Null(ex);
+            Assert.Equal(CustomerMembershipType.Premium, customer.MembershipType);
+        }
+
+        [Fact]
+        public async Task MembershipDoesntChangeWhenWasBookMembershipAndBookmembershipWasOrdered()
+        {
+            CustomerAddress addr = new CustomerAddress("name", "street1", null, "zip", "city", "country");
+            Customer customer = new Customer("first", "last");
+            customer.Addresses.Add(addr);
+            customer.MembershipType = CustomerMembershipType.BookClub;
+
+            Product bookMembership = new Product("book membership", new BookMembershipProductType());
+            PurchaseOrder validorder = new PurchaseOrder(1, customer, addr);
+            PurchaseOrderLine validLine = new PurchaseOrderLine(bookMembership);
+            validorder.OrderLines.Add(validLine);
+
+            MembershipTypeProcessor proc = new MembershipTypeProcessor();
+
+            var ex = await Record.ExceptionAsync(async () => {
+                await proc.ProcessAsync(validorder, validLine);
+            });
+
+            Assert.Null(ex);
+            Assert.Equal(CustomerMembershipType.BookClub, customer.MembershipType);
+        }
     }
 }

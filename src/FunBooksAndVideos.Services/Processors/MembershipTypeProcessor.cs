@@ -30,9 +30,11 @@ namespace FunBooksAndVideos.Services.Processors
                     // set to the one from order
                     order.Customer.MembershipType = ((IMembershipProductType)line.Product.Type).MembershipType;
                 }
-                else
+                else if(order.Customer.MembershipType != ((IMembershipProductType)line.Product.Type).MembershipType) 
+                {
                     // set as premium
                     order.Customer.MembershipType = CustomerMembershipType.Premium;
+                }
             });
         }
     }
