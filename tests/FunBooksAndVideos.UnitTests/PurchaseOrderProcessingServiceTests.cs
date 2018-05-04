@@ -16,6 +16,13 @@ namespace FunBooksAndVideos.UnitTests
         }
 
         [Fact]
+        public void ProcessorsListIsNotEmpty()
+        {
+            PurchaseOrderProcessingService service = new PurchaseOrderProcessingService();
+            Assert.NotEmpty(service.P)
+        }
+
+        [Fact]
         public async Task CantProcessNullOrder()
         {
             PurchaseOrderProcessingService service = new PurchaseOrderProcessingService();

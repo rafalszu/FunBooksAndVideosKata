@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FunBooksAndVideos.Models;
 using FunBooksAndVideos.Models.Exceptions;
@@ -12,6 +14,12 @@ namespace FunBooksAndVideos.Services
     // and subscribers would be responsible for processing purhcase orders
     public class PurchaseOrderProcessingService : IPurchaseOrderProcessingService
     {
+        private readonly List<IProcessor> processors;
+        public List<IProcessor> Processors
+        {
+            get { return processors; }
+        }
+
         private ConcurrentQueue<PurchaseOrder> _orderQueue;
         public ConcurrentQueue<PurchaseOrder> OrderQueue
         {
@@ -26,14 +34,15 @@ namespace FunBooksAndVideos.Services
 
         public PurchaseOrderProcessingService()
         {
-            // get all assemblies with interface IOrderProcessor
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(IOrderLineProcessor<>).IsAssignableFrom(p) && !p.IsInterface)
-                .ToList();
+            processors = new List<IProcessor>();
 
+            var entryAssembly = System.Reflection.Assembly.GetExecutingAssembly();//.GetEntryAssembly();
+            foreach(var definedType in entryAssembly.DefinedTypes)
+            {
+                if(definedType.ImplementedInterfaces.Contains(typeof(IProcessor)) && !definedType.IsInterface)
+                    processors.Add((IProcessor)entryAssembly.CreateInstance(definedType.FullName));
+            }
         }
-
         public async Task ProcessPurchaseOrderAsync(PurchaseOrder purchaseOrder)
         {
             if(purchaseOrder == null)
@@ -66,14 +75,28 @@ namespace FunBooksAndVideos.Services
                 throw new ArgumentNullException(nameof(order));
             order.Validate();
 
+            var tasks = order.OrderLines.Select(async line => 
+            {
+                await RunProcessorsAsync(order, line);
+            });
             
-            // types.ForEach(t => {
-            //     // create instance of given type
-            //     var instance = Activator.CreateInstance(t);
-                
-            //     // check canHandle
-            //     // if so, call handle
-            // });
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task RunProcessorsAsync(PurchaseOrder order, PurchaseOrderLine line)
+        {
+            if(order == null)
+                throw new ArgumentNullException(nameof(order));
+            if(line == null)
+                throw new ArgumentNullException(nameof(line));
+
+            var tasks = processors.Select(async proc => 
+            {
+                if(proc.CanProcess(line.Product))
+                    await proc.ProcessAsync(order, line);
+            });
+
+            await Task.WhenAll(tasks);
         }
     }
 }

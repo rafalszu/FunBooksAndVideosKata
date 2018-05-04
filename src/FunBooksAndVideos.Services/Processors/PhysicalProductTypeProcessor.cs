@@ -1,16 +1,22 @@
 using System;
+using System.Threading.Tasks;
 using FunBooksAndVideos.Models;
 
 namespace FunBooksAndVideos.Services.Processors
 {
-    public class PhysicalProductTypeProcessor : IOrderLineProcessor<IPhysicalProductType>
+    public class PhysicalProductTypeProcessor : IProcessor
     {
         public bool CanProcess(IPhysicalProductType productType)
         {
             return true;
         }
 
-        public void Process(PurchaseOrder order, PurchaseOrderLine line)
+        public bool CanProcess(Product product)
+        {
+            return product.Type is IPhysicalProductType;
+        }
+
+        public async Task ProcessAsync(PurchaseOrder order, PurchaseOrderLine line)
         {
             if(order == null)
                 throw new ArgumentNullException(nameof(order));
@@ -21,8 +27,11 @@ namespace FunBooksAndVideos.Services.Processors
             if(line.Product.Type == null)
                 throw new ArgumentNullException(nameof(line.Product.Type));
             
-            ShippingSlip shippingSlip = new ShippingSlip(order.OrderNumber);
-            order.ShippingSlip = shippingSlip;
+            await Task.Factory.StartNew(() => 
+            {
+                ShippingSlip shippingSlip = new ShippingSlip(order.OrderNumber);
+                order.ShippingSlip = shippingSlip;
+            });
         }
     }
 }
