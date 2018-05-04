@@ -22,10 +22,10 @@ namespace FunBooksAndVideos.Services.Processors
                 throw new ArgumentNullException(nameof(order));
             if(line == null)
                 throw new ArgumentNullException(nameof(line));
-            if(line.Product == null)
-                throw new ArgumentNullException(nameof(line.Product));
-            if(line.Product.Type == null)
-                throw new ArgumentNullException(nameof(line.Product.Type));
+            
+            order.Validate();
+            if(!CanProcess(line.Product))
+                throw new NotSupportedException(nameof(line.Product));
             
             await Task.Factory.StartNew(() => 
             {
