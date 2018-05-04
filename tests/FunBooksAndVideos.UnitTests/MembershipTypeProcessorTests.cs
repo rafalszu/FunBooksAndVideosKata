@@ -22,6 +22,15 @@ namespace FunBooksAndVideos.UnitTests
         }
 
         [Fact]
+        public void FailsOnProcessingOtherProductTypes()
+        {
+            MembershipTypeProcessor proc = new MembershipTypeProcessor();
+
+            Product video = new Product("asf", new VideoProductType());
+            Assert.False(proc.CanProcess(video));
+        }
+
+        [Fact]
         public async Task CantProcessNullOrder()
         {
             MembershipTypeProcessor proc = new MembershipTypeProcessor();
