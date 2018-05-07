@@ -105,8 +105,6 @@ namespace FunBooksAndVideos.UnitTests
             customer.Addresses.Add(addr);
 
             Product bookMembership = new Product("book membership", new BookMembershipProductType());
-            Product book = new Product("book", new BookProductType());
-            Product video = new Product("video", new VideoProductType());
 
             PhysicalProductTypeProcessor proc = new PhysicalProductTypeProcessor();
 
@@ -122,16 +120,36 @@ namespace FunBooksAndVideos.UnitTests
         }
 
         [Fact]
-        public async Task ShipmentSlipGetsGeneratedForPhysicalProductType()
+        public async Task ShipmentSlipNOTGeneratedWhenProductIsNotPhysical()
         {
             CustomerAddress addr = new CustomerAddress("name", "street1", null, "zip", "city", "country");
             Customer customer = new Customer("first", "last");
             customer.Addresses.Add(addr);
 
             Product bookMembership = new Product("book membership", new BookMembershipProductType());
-            Product book = new Product("book", new BookProductType());
-            Product video = new Product("video", new VideoProductType());
+            PhysicalProductTypeProcessor proc = new PhysicalProductTypeProcessor();
 
+            PurchaseOrder validorder = new PurchaseOrder(1, customer, addr);
+            PurchaseOrderLine validLine = new PurchaseOrderLine(bookMembership);
+            validorder.OrderLines.Add(validLine);
+
+            Assert.Null(validorder.ShippingSlip);
+
+            var ex2 = await Record.ExceptionAsync(async () => {
+                await proc.ProcessAsync(validorder, validLine);
+            });
+            Assert.NotNull(ex2);
+            Assert.IsType<NotSupportedException>(ex2);
+        }
+
+        [Fact]
+        public async Task ShipmentSlipGetsGeneratedForPhysicalProductType()
+        {
+            CustomerAddress addr = new CustomerAddress("name", "street1", null, "zip", "city", "country");
+            Customer customer = new Customer("first", "last");
+            customer.Addresses.Add(addr);
+
+            Product book = new Product("book", new BookProductType());
             PhysicalProductTypeProcessor proc = new PhysicalProductTypeProcessor();
 
             PurchaseOrder validorder = new PurchaseOrder(1, customer, addr);
